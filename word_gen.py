@@ -1,7 +1,6 @@
 import itertools
 from typing import List
 
-from letter_grabber import grab_letters
 from Letters import Letter, Letters
 
 
@@ -42,7 +41,7 @@ def find_letter_sequence(word: str, available_letters: Letters) -> Letters:
 
 
 if __name__ == "__main__":
-    letters = grab_letters()
+    letters = None
     valid_letter_sequences = get_words(letters)
 
     for seq in valid_letter_sequences:

@@ -1,5 +1,7 @@
 from typing import List
 
+import cv2
+import easyocr
 import pyautogui as p
 from dotenv import load_dotenv
 
@@ -10,7 +12,15 @@ from word_gen import get_words
 
 load_dotenv()
 
-LEVEL = 20
+
+def check_next_level() -> int | None:
+    p.screenshot("check_next_level.png", region=(860, 670, 310, 80))
+    # fmt: off
+    lvl = ((easyocr.Reader(['en'], gpu=False)).readtext(cv2.imread("check_next_level.png")))[0][1].strip().upper()
+    # fmt: on
+    if lvl.startswith("LEVEL"):
+        return int(lvl.split(" ")[1])
+    return None
 
 
 def move_to_back(valid_letter_sequences: List[Letters], no_ads_max_points: str):
@@ -24,6 +34,13 @@ def move_to_back(valid_letter_sequences: List[Letters], no_ads_max_points: str):
 
 
 if __name__ == "__main__":
+    LEVEL = check_next_level()
+    if LEVEL is not None:
+        p.click(1015, 710)
+        p.sleep(2)
+    else:
+        exit()  # replace with continue in a loop
+    print(f"LEVEL: {LEVEL}")
     obj = get_letters(LEVEL)
     letters = d_grab_letters(obj["circle_letters"])
     valid_letter_sequences = get_words(letters)
